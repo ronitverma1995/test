@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solar Manufacturing Capacity Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Solar Manufacturing Capacity Calculator</h1>
+        <form id="calculator-form">
+            <label for="num-cells">Number of Cells:</label>
+            <input type="number" id="num-cells" step="any" required><br><br>
+
+            <label for="dimension-L">Cell Size (L X W mm):</label>
+            <input type="number" id="dimension-L" step="any" required>
+            <span>X</span>
+            <input type="number" id="dimension-W" step="any" required><br><br>
+
+            <label for="cell-efficiency">Cell Efficiency (%):</label>
+            <input type="number" id="cell-efficiency" step="any" required><br><br>
+
+            <label for="ctm-loss">CTM Loss (%):</label>
+            <input type="number" id="ctm-loss" step="any" required><br><br>
+
+            <hr>
+
+            <h2>Stringer Cluster</h2>
+            <label for="cph">Cells per Hour (CPH):</label>
+            <input type="number" id="cph" step="any" required><br><br>
+
+            <label for="num-stringers">Number of Stringers:</label>
+            <input type="number" id="num-stringers" step="any" required><br><br>
+
+            <label for="availability">Availability (%):</label>
+            <input type="number" id="availability" step="any" required><br><br>
+
+            <label for="yield">Yield (%):</label>
+            <input type="number" id="yield" step="any" required><br><br>
+
+            <hr>
+
+            <h2>Laminator Cluster</h2>
+            <label for="modules-in-batch">Modules in Batch:</label>
+            <input type="number" id="modules-in-batch" step="any" required><br><br>
+
+            <label for="cycle-time">Cycle Time (s):</label>
+            <input type="number" id="cycle-time" step="any" required><br><br>
+
+            <label for="num-machines">Number of Machines:</label>
+            <input type="number" id="num-machines" step="any" required><br><br>
+
+            <label for="availability-lamination">Availability (%):</label>
+            <input type="number" id="availability-lamination" step="any" required><br><br>
+
+            <label for="yield-lamination">Yield (%):</label>
+            <input type="number" id="yield-lamination" step="any" required><br><br>
+
+            <label for="stacks">Number of Stacks:</label>
+            <select id="stacks">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select><br><br>
+
+            <hr>
+
+            <h2>Automation Cluster</h2>
+            <label for="max-cycle-time-automation">Max Cycle Time of Automation Tool (s):</label>
+            <input type="number" id="max-cycle-time-automation" step="any" required><br><br>
+
+            <label for="availability-automation">Availability (%):</label>
+            <input type="number" id="availability-automation" step="any" required><br><br>
+
+            <label for="yield-automation">Yield (%):</label>
+            <input type="number" id="yield-automation" step="any" required><br><br>
+
+            <label for="num-automation-lines">Number of Automation Lines:</label>
+            <input type="number" id="num-automation-lines" step="any" required><br><br>
+
+            <hr>
+
+            <button type="button" id="calculate-btn">Calculate Results</button>
+        </form>
+        <div class="result" id="result"></div>
+        <div id="watermark" style="font-size: 12px; color: gray; text-align: right;">Created by Ronit Kumar</div>
+    </div>
+
+    <script>
+        document.getElementById("calculate-btn").addEventListener("click", function() {
+            // Get input values
+            var numCells = parseFloat(document.getElementById("num-cells").value);
+            var dimensionL = parseFloat(document.getElementById("dimension-L").value);
+            var dimensionW = parseFloat(document.getElementById("dimension-W").value);
+            var cellEfficiency = parseFloat(document.getElementById("cell-efficiency").value) / 100;
+            var ctmLoss = parseFloat(document.getElementById("ctm-loss").value) / 100;
+
+            var cph = parseFloat(document.getElementById("cph").value);
+            var numStringers = parseFloat(document.getElementById("num-stringers").value);
+            var availabilityStringer = parseFloat(document.getElementById("availability").value) / 100;
+            var yieldStringer = parseFloat(document.getElementById("yield").value) / 100;
+
+            var modulesInBatch = parseFloat(document.getElementById("modules-in-batch").value);
+            var cycleTime = parseFloat(document.getElementById("cycle-time").value);
+            var numMachines = parseFloat(document.getElementById("num-machines").value);
+            var availabilityLamination = parseFloat(document.getElementById("availability-lamination").value) / 100;
+            var yieldLamination = parseFloat(document.getElementById("yield-lamination").value) / 100;
+
+            var maxCycleTimeAutomation = parseFloat(document.getElementById("max-cycle-time-automation").value);
+            var availabilityAutomation = parseFloat(document.getElementById("availability-automation").value) / 100;
+            var yieldAutomation = parseFloat(document.getElementById("yield-automation").value) / 100;
+            var numAutomationLines = parseFloat(document.getElementById("num-automation-lines").value);
+
+            var stacks = parseFloat(document.getElementById("stacks").value);
+
+            // Perform calculations
+            var cellSize = dimensionL * dimensionW / 1e6;
+            var power = numCells * cellSize * 1000 * cellEfficiency * (1 - ctmLoss);
+
+            var hourlyThroughputStringer = cph / numCells * availabilityStringer * yieldStringer * numStringers;
+            var yearlyThroughputStringer = hourlyThroughputStringer * 24 * 365;
+            var yearlyCapacityStringer = yearlyThroughputStringer * power / 1_000_000;
+
+            var hourlyThroughputLamination = numMachines * (3600 / cycleTime) * modulesInBatch * availabilityLamination * yieldLamination;
+            var yearlyThroughputLamination = hourlyThroughputLamination * 24 * 365;
+            var yearlyCapacityLamination = yearlyThroughputLamination * power / 1_000_000;
+
+            var hourlyThroughputAutomation = numAutomationLines * (3600 / maxCycleTimeAutomation) * availabilityAutomation * yieldAutomation;
+            var yearlyThroughputAutomation = hourlyThroughputAutomation * 24 * 365;
+            var yearlyCapacityAutomation = yearlyThroughputAutomation * power / 1_000_000;
+
+            var bottleneckCapacity = Math.min(yearlyCapacityStringer, yearlyCapacityLamination, yearlyCapacityAutomation);
+            var bottleneckCluster = "";
+            if (bottleneckCapacity === yearlyCapacityStringer) {
+                bottleneckCluster = "Stringer Cluster";
+            } else if (bottleneckCapacity === yearlyCapacityLamination) {
+                bottleneckCluster = "Laminator Cluster";
+            } else if (bottleneckCapacity === yearlyCapacityAutomation) {
+                bottleneckCluster = "Automation Cluster";
+            }
+
+            // Display results
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "<p>Module Power: " + power.toFixed(2) + " MW</p>";
+            resultDiv.innerHTML += "<p>Hourly Stringer Throughput: " + hourlyThroughputStringer.toFixed(2) + " modules</p>";
+            resultDiv.innerHTML += "<p>Yearly Stringer Capacity: " + yearlyCapacityStringer.toFixed(2) + " MW</p>";
+            resultDiv.innerHTML += "<p>Hourly Lamination Throughput: " + hourlyThroughputLamination.toFixed(2) + " modules</p>";
+            resultDiv.innerHTML += "<p>Yearly Lamination Capacity: " + yearlyCapacityLamination.toFixed(2) + " MW</p>";
+            resultDiv.innerHTML += "<p>Hourly Automation Throughput: " + hourlyThroughputAutomation.toFixed(2) + " modules</p>";
+            resultDiv.innerHTML += "<p>Yearly Automation Capacity: " + yearlyCapacityAutomation.toFixed(2) + " MW</p>";
+            resultDiv.innerHTML += "<p>Bottleneck Capacity: " + bottleneckCapacity.toFixed(2) + " MW in " + bottleneckCluster + "</p>";
+        });
+    </script>
+</body>
+</html>
