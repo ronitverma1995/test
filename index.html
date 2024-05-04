@@ -1,166 +1,251 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solar Manufacturing Capacity Calculator</title>
     <style>
         body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
-            margin: 20px;
         }
+
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: 80vh 20vh;
+            height: 100vh;
         }
-        .result {
+
+        .partition {
+            padding: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .partition h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .input-container label {
             font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-container input,
+        .input-container select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .output-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
             margin-top: 10px;
+        }
+
+        .output-row div {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .output-row div:last-child {
+            margin-right: 0;
+        }
+
+        .output-row label {
+            font-weight: bold;
+        }
+
+        .output-row p {
+            margin: 0;
+        }
+
+        #module-power-label {
+            color: green;
+            font-weight: bold;
+            margin-right: 10px; /* Add margin to separate from result */
+        }
+
+        #module-power {
+            font-weight: bold;
+            color: green;
+            font-size: 24px; /* Increase font size for Module Power result */
+        }
+
+        /* General Parameters cluster decoration */
+        .general-parameters {
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .general-parameters h2 {
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Solar Manufacturing Capacity Calculator</h1>
-        <form id="calculator-form">
-            <label for="num-cells">Number of Cells:</label>
-            <input type="number" id="num-cells" step="any" required><br><br>
+        <div class="partition general-parameters">
+            <h2>General Parameters</h2>
+            <div class="input-container">
+                <label for="number-of-cells">Number of Cells:</label>
+                <input type="number" id="number-of-cells" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="cell-size">Cell Size:</label>
+                <select id="cell-size" required>
+                    <option value="156">M0 (156 x 156 mm)</option>
+                    <option value="156.75">M2 (156.75 x 156.75 mm)</option>
+                    <option value="158.75">M3 (158.75 x 158.75 mm)</option>
+                    <option value="161.7">M4 (161.7 x 161.7 mm)</option>
+                    <option value="165">M5 (165 x 165 mm)</option>
+                    <option value="166">M6 (166 x 166 mm)</option>
+                    <option value="182">M10/G10 (182 x 182 mm)</option>
+                    <option value="210">M12/G12 (210 x 210 mm)</option>
+                    <option value="230">G12+ (230 x 230 mm)</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="cell-type">Cell Type:</label>
+                <select id="cell-type" required>
+                    <option value="full">Full Cell</option>
+                    <option value="half">Half-Cut Cell</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="cell-efficiency">Cell Efficiency (%):</label>
+                <input type="number" id="cell-efficiency" min="0" max="100" step="0.01" required>
+            </div>
+            <div class="input-container">
+                <label for="ctm-loss">CTM Loss (%):</label>
+                <input type="number" id="ctm-loss" min="0" max="100" step="0.01" required>
+            </div>
+            <div class="input-container">
+                <label id="module-power-label">Module Power:</label>
+                <div id="module-power"></div>
+            </div>
+        </div>
 
-            <label for="dimension-L">Cell Size (L X W mm):</label>
-            <input type="number" id="dimension-L" step="any" required>
-            <span>X</span>
-            <input type="number" id="dimension-W" step="any" required><br><br>
+        <div class="partition" style="background-color: #f5f5f5;">
+            <h2>Stringers Cluster</h2>
+            <div class="input-container">
+                <label for="gross-throughput">Gross Throughput (Cells/Hr):</label>
+                <input type="number" id="gross-throughput" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="number-of-machines">Number of Machines:</label>
+                <input type="number" id="number-of-machines" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="availability">Availability (%):</label>
+                <input type="number" id="availability" min="1" max="100" step="0.01" required>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="modules-per-hour">Modules/Hr:</label>
+                    <p id="modules-per-hour"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="daily-module-production">Daily Module Production:</label>
+                    <p id="daily-module-production"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="daily-capacity">Daily Capacity (MW):</label>
+                    <p id="daily-capacity"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="annual-capacity">Annual Capacity (MW):</label>
+                    <p id="annual-capacity"></p>
+                </div>
+            </div>
+        </div>
 
-            <label for="cell-efficiency">Cell Efficiency (%):</label>
-            <input type="number" id="cell-efficiency" step="any" required><br><br>
-
-            <label for="ctm-loss">CTM Loss (%):</label>
-            <input type="number" id="ctm-loss" step="any" required><br><br>
-
-            <hr>
-
-            <h2>Stringer Cluster</h2>
-            <label for="cph">Cells per Hour (CPH):</label>
-            <input type="number" id="cph" step="any" required><br><br>
-
-            <label for="num-stringers">Number of Stringers:</label>
-            <input type="number" id="num-stringers" step="any" required><br><br>
-
-            <label for="availability">Availability (%):</label>
-            <input type="number" id="availability" step="any" required><br><br>
-
-            <label for="yield">Yield (%):</label>
-            <input type="number" id="yield" step="any" required><br><br>
-
-            <hr>
-
-            <h2>Laminator Cluster</h2>
-            <label for="modules-in-batch">Modules in Batch:</label>
-            <input type="number" id="modules-in-batch" step="any" required><br><br>
-
-            <label for="cycle-time">Cycle Time (s):</label>
-            <input type="number" id="cycle-time" step="any" required><br><br>
-
-            <label for="num-machines">Number of Machines:</label>
-            <input type="number" id="num-machines" step="any" required><br><br>
-
-            <label for="availability-lamination">Availability (%):</label>
-            <input type="number" id="availability-lamination" step="any" required><br><br>
-
-            <label for="yield-lamination">Yield (%):</label>
-            <input type="number" id="yield-lamination" step="any" required><br><br>
-
-            <label for="stacks">Number of Stacks:</label>
-            <select id="stacks">
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select><br><br>
-
-            <hr>
-
+        <div class="partition" style="background-color: #f0f0f0;">
             <h2>Automation Cluster</h2>
-            <label for="max-cycle-time-automation">Max Cycle Time of Automation Tool (s):</label>
-            <input type="number" id="max-cycle-time-automation" step="any" required><br><br>
+            <!-- Input fields for Automation Cluster -->
+        </div>
 
-            <label for="availability-automation">Availability (%):</label>
-            <input type="number" id="availability-automation" step="any" required><br><br>
-
-            <label for="yield-automation">Yield (%):</label>
-            <input type="number" id="yield-automation" step="any" required><br><br>
-
-            <label for="num-automation-lines">Number of Automation Lines:</label>
-            <input type="number" id="num-automation-lines" step="any" required><br><br>
-
-            <hr>
-
-            <button type="button" id="calculate-btn">Calculate Results</button>
-        </form>
-        <div class="result" id="result"></div>
-        <div id="watermark" style="font-size: 12px; color: gray; text-align: right;">Created by Ronit Kumar</div>
+        <div class="partition" style="background-color: #f5f5f5;">
+            <h2>Lamination Cluster</h2>
+            <!-- Input fields for Lamination Cluster -->
+        </div>
     </div>
 
     <script>
-        document.getElementById("calculate-btn").addEventListener("click", function() {
-            // Get input values
-            var numCells = parseFloat(document.getElementById("num-cells").value);
-            var dimensionL = parseFloat(document.getElementById("dimension-L").value);
-            var dimensionW = parseFloat(document.getElementById("dimension-W").value);
-            var cellEfficiency = parseFloat(document.getElementById("cell-efficiency").value) / 100;
-            var ctmLoss = parseFloat(document.getElementById("ctm-loss").value) / 100;
+        // Code to calculate bottleneck cluster and summary capacity
+        function calculateBottleneckCluster() {
+            // Implement your logic here to calculate the bottleneck cluster
+            // based on the input values from all partitions
+            // and return the result
+            return "Stringers Cluster";
+        }
 
-            var cph = parseFloat(document.getElementById("cph").value);
-            var numStringers = parseFloat(document.getElementById("num-stringers").value);
-            var availabilityStringer = parseFloat(document.getElementById("availability").value) / 100;
-            var yieldStringer = parseFloat(document.getElementById("yield").value) / 100;
+        function calculateSummaryCapacity() {
+            // Implement your logic here to calculate the summary capacity
+            // based on the input values from all partitions
+            // and return the result
+            return 100.25;
+        }
 
-            var modulesInBatch = parseFloat(document.getElementById("modules-in-batch").value);
-            var cycleTime = parseFloat(document.getElementById("cycle-time").value);
-            var numMachines = parseFloat(document.getElementById("num-machines").value);
-            var availabilityLamination = parseFloat(document.getElementById("availability-lamination").value) / 100;
-            var yieldLamination = parseFloat(document.getElementById("yield-lamination").value) / 100;
+        function updateOutput() {
+            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
+            const cellSize = parseFloat(document.getElementById('cell-size').value);
+            const cellType = document.getElementById('cell-type').value;
+            const cellEfficiency = parseFloat(document.getElementById('cell-efficiency').value);
+            const ctmLoss = parseFloat(document.getElementById('ctm-loss').value);
+            const grossThroughput = parseFloat(document.getElementById('gross-throughput').value);
+            const numberOfMachines = parseFloat(document.getElementById('number-of-machines').value);
+            const availability = parseFloat(document.getElementById('availability').value);
 
-            var maxCycleTimeAutomation = parseFloat(document.getElementById("max-cycle-time-automation").value);
-            var availabilityAutomation = parseFloat(document.getElementById("availability-automation").value) / 100;
-            var yieldAutomation = parseFloat(document.getElementById("yield-automation").value) / 100;
-            var numAutomationLines = parseFloat(document.getElementById("num-automation-lines").value);
+            const cellArea = (cellSize / 1000) ** 2; // Convert mm to m and calculate area
+            let modulePower = numberOfCells * cellArea * 1000 * cellEfficiency * (cellType === 'full' ? 1 : 0.5) * (100 - ctmLoss) / 10000;
+            document.getElementById('module-power').textContent = `${modulePower.toFixed(2)} Watts`;
 
-            var stacks = parseFloat(document.getElementById("stacks").value);
+            let modulesPerHour = (grossThroughput * availability) / (numberOfCells * numberOfMachines);
+            document.getElementById('modules-per-hour').textContent = modulesPerHour.toFixed(2);
 
-            // Perform calculations
-            var cellSize = dimensionL * dimensionW / 1e6;
-            var power = numCells * cellSize * 1000 * cellEfficiency * (1 - ctmLoss);
+            let dailyModuleProduction = modulesPerHour * 24;
+            document.getElementById('daily-module-production').textContent = dailyModuleProduction.toFixed(2);
 
-            var hourlyThroughputStringer = cph / numCells * availabilityStringer * yieldStringer * numStringers;
-            var yearlyThroughputStringer = hourlyThroughputStringer * 24 * 365;
-            var yearlyCapacityStringer = yearlyThroughputStringer * power / 1_000_000;
+            let dailyCapacity = dailyModuleProduction * modulePower / 1000000;
+            document.getElementById('daily-capacity').textContent = dailyCapacity.toFixed(2);
 
-            var hourlyThroughputLamination = numMachines * (3600 / cycleTime) * modulesInBatch * availabilityLamination * yieldLamination;
-            var yearlyThroughputLamination = hourlyThroughputLamination * 24 * 365;
-            var yearlyCapacityLamination = yearlyThroughputLamination * power / 1_000_000;
+            let annualCapacity = dailyCapacity * 365;
+            document.getElementById('annual-capacity').textContent = annualCapacity.toFixed(2);
+        }
 
-            var hourlyThroughputAutomation = numAutomationLines * (3600 / maxCycleTimeAutomation) * availabilityAutomation * yieldAutomation;
-            var yearlyThroughputAutomation = hourlyThroughputAutomation * 24 * 365;
-            var yearlyCapacityAutomation = yearlyThroughputAutomation * power / 1_000_000;
-
-            var bottleneckCapacity = Math.min(yearlyCapacityStringer, yearlyCapacityLamination, yearlyCapacityAutomation);
-            var bottleneckCluster = "";
-            if (bottleneckCapacity === yearlyCapacityStringer) {
-                bottleneckCluster = "Stringer Cluster";
-            } else if (bottleneckCapacity === yearlyCapacityLamination) {
-                bottleneckCluster = "Laminator Cluster";
-            } else if (bottleneckCapacity === yearlyCapacityAutomation) {
-                bottleneckCluster = "Automation Cluster";
-            }
-
-            // Display results
-            var resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = "<p>Module Power: " + power.toFixed(2) + "Watts</p>";
-            resultDiv.innerHTML += "<p>Hourly Stringer Throughput: " + hourlyThroughputStringer.toFixed(2) + " modules</p>";
-            resultDiv.innerHTML += "<p>Yearly Stringer Capacity: " + yearlyCapacityStringer.toFixed(2) + " MW</p>";
-            resultDiv.innerHTML += "<p>Hourly Lamination Throughput: " + hourlyThroughputLamination.toFixed(2) + " modules</p>";
-            resultDiv.innerHTML += "<p>Yearly Lamination Capacity: " + yearlyCapacityLamination.toFixed(2) + " MW</p>";
-            resultDiv.innerHTML += "<p>Hourly Automation Throughput: " + hourlyThroughputAutomation.toFixed(2) + " modules</p>";
-            resultDiv.innerHTML += "<p>Yearly Automation Capacity: " + yearlyCapacityAutomation.toFixed(2) + " MW</p>";
-            resultDiv.innerHTML += "<p>Bottleneck Capacity: " + bottleneckCapacity.toFixed(2) + " MW in " + bottleneckCluster + "</p>";
+        // Event listeners for input changes
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('input', updateOutput);
         });
+
+        // Initial update
+        updateOutput();
     </script>
 </body>
 </html>
