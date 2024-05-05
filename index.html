@@ -4,65 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solar Manufacturing Capacity Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
         }
 
         .container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: 80vh 20vh;
-            height: 100vh;
+            grid-template-rows: auto;
+            gap: 20px;
+            padding: 20px;
         }
 
         .partition {
+            background-color: #f5f5f5;
             padding: 20px;
-            background-color: #f8f8f8;
-            border: 1px solid #ccc;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
         }
 
         .partition h2 {
             margin-top: 0;
-            color: #333;
         }
 
         .input-container {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .input-container label {
-            font-weight: bold;
+            font-weight: 500;
             margin-bottom: 5px;
         }
 
         .input-container input,
         .input-container select {
-            padding: 5px;
+            padding: 8px 12px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
         .output-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .output-row div {
             flex: 1;
-            margin-right: 10px;
+            margin-right: 15px;
         }
 
         .output-row div:last-child {
@@ -70,41 +73,36 @@
         }
 
         .output-row label {
-            font-weight: bold;
+            font-weight: 500;
         }
 
         .output-row p {
             margin: 0;
+            font-size: 16px;
+            font-weight: 600;
         }
 
         #module-power-label {
-            color: green;
-            font-weight: bold;
-            margin-right: 10px; /* Add margin to separate from result */
+            color: #4caf50;
+            font-weight: 600;
+            margin-right: 10px;
         }
 
         #module-power {
-            font-weight: bold;
-            color: green;
-            font-size: 24px; /* Increase font size for Module Power result */
-        }
-
-        /* General Parameters cluster decoration */
-        .general-parameters {
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .general-parameters h2 {
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 10px;
+            font-weight: 600;
+            color: #4caf50;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Solar Manufacturing Capacity Calculator</h1>
+        <p>Created by Ronit Kumar</p>
+    </header>
+
     <div class="container">
-        <div class="partition general-parameters">
+        <div class="partition">
             <h2>General Parameters</h2>
             <div class="input-container">
                 <label for="number-of-cells">Number of Cells:</label>
@@ -140,12 +138,12 @@
                 <input type="number" id="ctm-loss" min="0" max="100" step="0.01" required>
             </div>
             <div class="input-container">
-                <label id="module-power-label">Module Power:</label>
-                <div id="module-power"></div>
+                <label for="module-power">Module Power:</label>
+                <span id="module-power"></span> Watts
             </div>
         </div>
 
-        <div class="partition" style="background-color: #f5f5f5;">
+        <div class="partition">
             <h2>Stringers Cluster</h2>
             <div class="input-container">
                 <label for="gross-throughput">Gross Throughput (Cells/Hr):</label>
@@ -185,67 +183,67 @@
             </div>
         </div>
 
-        <div class="partition" style="background-color: #f0f0f0;">
+        <div class="partition">
             <h2>Automation Cluster</h2>
             <!-- Input fields for Automation Cluster -->
         </div>
 
-        <div class="partition" style="background-color: #f5f5f5;">
+        <div class="partition">
             <h2>Lamination Cluster</h2>
             <!-- Input fields for Lamination Cluster -->
         </div>
     </div>
 
     <script>
-        // Code to calculate bottleneck cluster and summary capacity
-        function calculateBottleneckCluster() {
-            // Implement your logic here to calculate the bottleneck cluster
-            // based on the input values from all partitions
-            // and return the result
-            return "Stringers Cluster";
-        }
-
-        function calculateSummaryCapacity() {
-            // Implement your logic here to calculate the summary capacity
-            // based on the input values from all partitions
-            // and return the result
-            return 100.25;
-        }
-
-        function updateOutput() {
+        function calculateModulePower() {
             const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
             const cellSize = parseFloat(document.getElementById('cell-size').value);
             const cellType = document.getElementById('cell-type').value;
             const cellEfficiency = parseFloat(document.getElementById('cell-efficiency').value);
             const ctmLoss = parseFloat(document.getElementById('ctm-loss').value);
-            const grossThroughput = parseFloat(document.getElementById('gross-throughput').value);
-            const numberOfMachines = parseFloat(document.getElementById('number-of-machines').value);
-            const availability = parseFloat(document.getElementById('availability').value);
 
             const cellArea = (cellSize / 1000) ** 2; // Convert mm to m and calculate area
             let modulePower = numberOfCells * cellArea * 1000 * cellEfficiency * (cellType === 'full' ? 1 : 0.5) * (100 - ctmLoss) / 10000;
-            document.getElementById('module-power').textContent = `${modulePower.toFixed(2)} Watts`;
+            document.getElementById('module-power').textContent = modulePower.toFixed(2);
 
-            let modulesPerHour = (grossThroughput * availability) / (numberOfCells * numberOfMachines);
+            // Update Stringers Cluster calculations
+            calculateStringerCluster();
+        }
+
+        function calculateStringerCluster() {
+            const grossThroughput = parseFloat(document.getElementById('gross-throughput').value);
+            const numberOfMachines = parseFloat(document.getElementById('number-of-machines').value);
+            const availability = parseFloat(document.getElementById('availability').value);
+            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
+            const modulePower = parseFloat(document.getElementById('module-power').textContent);
+
+            const modulesPerHour = (grossThroughput / numberOfCells) * numberOfMachines * availability / 100;
+            const dailyModuleProduction = modulesPerHour * 24;
+            const dailyCapacity = dailyModuleProduction * modulePower / 1000000; // Convert MW to kW
+
+            const annualCapacity = dailyCapacity * 365;
+
             document.getElementById('modules-per-hour').textContent = modulesPerHour.toFixed(2);
-
-            let dailyModuleProduction = modulesPerHour * 24;
             document.getElementById('daily-module-production').textContent = dailyModuleProduction.toFixed(2);
-
-            let dailyCapacity = dailyModuleProduction * modulePower / 1000000;
             document.getElementById('daily-capacity').textContent = dailyCapacity.toFixed(2);
-
-            let annualCapacity = dailyCapacity * 365;
             document.getElementById('annual-capacity').textContent = annualCapacity.toFixed(2);
         }
 
-        // Event listeners for input changes
-        document.querySelectorAll('input, select').forEach(input => {
-            input.addEventListener('input', updateOutput);
-        });
+        // Call calculateModulePower and calculateStringerCluster when the page loads
+        window.onload = function() {
+            calculateModulePower();
+        };
 
-        // Initial update
-        updateOutput();
+        // Add event listeners to update results when input values change
+        document.getElementById('number-of-cells').addEventListener('input', calculateModulePower);
+        document.getElementById('cell-size').addEventListener('input', calculateModulePower);
+        document.getElementById('cell-type').addEventListener('input', calculateModulePower);
+        document.getElementById('cell-efficiency').addEventListener('input', calculateModulePower);
+        document.getElementById('ctm-loss').addEventListener('input', calculateModulePower);
+
+        document.getElementById('gross-throughput').addEventListener('input', calculateStringerCluster);
+        document.getElementById('number-of-machines').addEventListener('input', calculateStringerCluster);
+        document.getElementById('availability').addEventListener('input', calculateStringerCluster);
     </script>
 </body>
-</html>
+</html
