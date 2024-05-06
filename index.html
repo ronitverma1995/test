@@ -186,11 +186,94 @@
         <div class="partition">
             <h2>Automation Cluster</h2>
             <!-- Input fields for Automation Cluster -->
+            <div class="input-container">
+                <label for="max-cycle-time">Maximum Cycle Time of Automation Tool (sec):</label>
+                <input type="number" id="max-cycle-time" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="no-of-automation-lines">No of Automation Lines:</label>
+                <input type="number" id="no-of-automation-lines" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="automation-availability">Availability (%):</label>
+                <input type="number" id="automation-availability" min="1" max="100" step="0.01" required>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="automation-modules-per-hour">Modules/Hr:</label>
+                    <p id="automation-modules-per-hour"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="automation-daily-module-production">Daily Module Production:</label>
+                    <p id="automation-daily-module-production"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="automation-daily-capacity">Daily Capacity (MW):</label>
+                    <p id="automation-daily-capacity"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="automation-annual-capacity">Annual Capacity (MW):</label>
+                    <p id="automation-annual-capacity"></p>
+                </div>
+            </div>
         </div>
 
         <div class="partition">
             <h2>Lamination Cluster</h2>
             <!-- Input fields for Lamination Cluster -->
+            <div class="input-container">
+                <label for="lamination-cycle-time">Cycle Time in sec:</label>
+                <input type="number" id="lamination-cycle-time" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="no-of-lamination-machines">No of Machines:</label>
+                <input type="number" id="no-of-lamination-machines" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="no-of-stacks">No of Stacks:</label>
+                <select id="no-of-stacks" required>
+                    <option value="1">Single Stack</option>
+                    <option value="2">Double Stack</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="no-of-modules-in-batch">No of Modules in a Batch:</label>
+                <input type="number" id="no-of-modules-in-batch" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="lamination-availability">Availability (%):</label>
+                <input type="number" id="lamination-availability" min="1" max="100" step="0.01" required>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="lamination-modules-per-hour">Modules/Hr:</label>
+                    <p id="lamination-modules-per-hour"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="lamination-daily-module-production">Daily Module Production:</label>
+                    <p id="lamination-daily-module-production"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="lamination-daily-capacity">Daily Capacity (MW):</label>
+                    <p id="lamination-daily-capacity"></p>
+                </div>
+            </div>
+            <div class="output-row">
+                <div>
+                    <label for="lamination-annual-capacity">Annual Capacity (MW):</label>
+                    <p id="lamination-annual-capacity"></p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -202,11 +285,10 @@
             const cellEfficiency = parseFloat(document.getElementById('cell-efficiency').value);
             const ctmLoss = parseFloat(document.getElementById('ctm-loss').value);
 
-            const cellArea = (cellSize / 1000) ** 2; // Convert mm to m and calculate area
+            const cellArea = (cellSize / 1000) ** 2;
             let modulePower = numberOfCells * cellArea * 1000 * cellEfficiency * (cellType === 'full' ? 1 : 0.5) * (100 - ctmLoss) / 10000;
             document.getElementById('module-power').textContent = modulePower.toFixed(2);
 
-            // Update Stringers Cluster calculations
             calculateStringerCluster();
         }
 
@@ -219,7 +301,7 @@
 
             const modulesPerHour = (grossThroughput / numberOfCells) * numberOfMachines * availability / 100;
             const dailyModuleProduction = modulesPerHour * 24;
-            const dailyCapacity = dailyModuleProduction * modulePower / 1000000; // Convert MW to kW
+            const dailyCapacity = dailyModuleProduction * modulePower / 1000000;
 
             const annualCapacity = dailyCapacity * 365;
 
@@ -229,21 +311,65 @@
             document.getElementById('annual-capacity').textContent = annualCapacity.toFixed(2);
         }
 
-        // Call calculateModulePower and calculateStringerCluster when the page loads
-        window.onload = function() {
-            calculateModulePower();
-        };
+        function calculateAutomationCluster() {
+            const maxCycleTime = parseFloat(document.getElementById('max-cycle-time').value);
+            const noOfAutomationLines = parseFloat(document.getElementById('no-of-automation-lines').value);
+            const automationAvailability = parseFloat(document.getElementById('automation-availability').value);
+            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
+            const modulePower = parseFloat(document.getElementById('module-power').textContent);
 
-        // Add event listeners to update results when input values change
+            const automationModulesPerHour = (3600 / maxCycleTime) * noOfAutomationLines * automationAvailability / 100;
+            const automationDailyModuleProduction = automationModulesPerHour * 24;
+            const automationDailyCapacity = automationDailyModuleProduction * modulePower / 1000000;
+
+            const automationAnnualCapacity = automationDailyCapacity * 365;
+
+            document.getElementById('automation-modules-per-hour').textContent = automationModulesPerHour.toFixed(2);
+            document.getElementById('automation-daily-module-production').textContent = automationDailyModuleProduction.toFixed(2);
+            document.getElementById('automation-daily-capacity').textContent = automationDailyCapacity.toFixed(2);
+            document.getElementById('automation-annual-capacity').textContent = automationAnnualCapacity.toFixed(2);
+        }
+
+        function calculateLaminationCluster() {
+            const laminationCycleTime = parseFloat(document.getElementById('lamination-cycle-time').value);
+            const noOfLaminationMachines = parseFloat(document.getElementById('no-of-lamination-machines').value);
+            const noOfStacks = parseFloat(document.getElementById('no-of-stacks').value);
+            const noOfModulesInBatch = parseFloat(document.getElementById('no-of-modules-in-batch').value);
+            const laminationAvailability = parseFloat(document.getElementById('lamination-availability').value);
+            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
+            const modulePower = parseFloat(document.getElementById('module-power').textContent);
+
+            const laminationModulesPerHour = (3600 / laminationCycleTime) * noOfLaminationMachines * noOfStacks * noOfModulesInBatch * laminationAvailability / 100;
+            const laminationDailyModuleProduction = laminationModulesPerHour * 24;
+            const laminationDailyCapacity = laminationDailyModuleProduction * modulePower / 1000000;
+
+            const laminationAnnualCapacity = laminationDailyCapacity * 365;
+
+            document.getElementById('lamination-modules-per-hour').textContent = laminationModulesPerHour.toFixed(2);
+            document.getElementById('lamination-daily-module-production').textContent = laminationDailyModuleProduction.toFixed(2);
+            document.getElementById('lamination-daily-capacity').textContent = laminationDailyCapacity.toFixed(2);
+            document.getElementById('lamination-annual-capacity').textContent = laminationAnnualCapacity.toFixed(2);
+        }
+
         document.getElementById('number-of-cells').addEventListener('input', calculateModulePower);
-        document.getElementById('cell-size').addEventListener('input', calculateModulePower);
-        document.getElementById('cell-type').addEventListener('input', calculateModulePower);
+        document.getElementById('cell-size').addEventListener('change', calculateModulePower);
+        document.getElementById('cell-type').addEventListener('change', calculateModulePower);
         document.getElementById('cell-efficiency').addEventListener('input', calculateModulePower);
         document.getElementById('ctm-loss').addEventListener('input', calculateModulePower);
 
         document.getElementById('gross-throughput').addEventListener('input', calculateStringerCluster);
         document.getElementById('number-of-machines').addEventListener('input', calculateStringerCluster);
         document.getElementById('availability').addEventListener('input', calculateStringerCluster);
+
+        document.getElementById('max-cycle-time').addEventListener('input', calculateAutomationCluster);
+        document.getElementById('no-of-automation-lines').addEventListener('input', calculateAutomationCluster);
+        document.getElementById('automation-availability').addEventListener('input', calculateAutomationCluster);
+
+        document.getElementById('lamination-cycle-time').addEventListener('input', calculateLaminationCluster);
+        document.getElementById('no-of-lamination-machines').addEventListener('input', calculateLaminationCluster);
+        document.getElementById('no-of-stacks').addEventListener('change', calculateLaminationCluster);
+        document.getElementById('no-of-modules-in-batch').addEventListener('input', calculateLaminationCluster);
+        document.getElementById('lamination-availability').addEventListener('input', calculateLaminationCluster);
     </script>
 </body>
-</html
+</html>
