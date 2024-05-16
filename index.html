@@ -8,149 +8,148 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', Arial, sans-serif;
-        }
-     
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-        }
-    
-        .container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: auto;
-            gap: 20px;
-            padding: 20px;
-        }
-    
-        .partition {
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
-    
-        .partition h2 {
-            margin-top: 0;
-        }
-    
-        .input-container {
-            margin-bottom: 15px;
-        }
-    
-        .input-container label {
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-    
-        .input-container input,
-        .input-container select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-    
-        .output-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-    
-        .output-row div {
-            flex: 1;
-            margin-right: 15px;
-        }
-    
-        .output-row div:last-child {
-            margin-right: 0;
-        }
-    
-        .output-row label {
-            font-weight: 500;
-        }
-    
-        .output-row p {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
-    
-        #module-power-label {
-            color: #4caf50;
-            font-weight: 600;
-            margin-right: 10px;
-        }
-    
-        #module-power {
-            font-weight: 600;
-            color: #4caf50;
-            font-size: 24px;
-        }
-    
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            background-color: #333;
-            color: white;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-        }
-    
-        .linkedin-logo {
-            width: 50px;
-            height: 50px;
-            vertical-align: middle;
-            margin-left: 5px;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', Arial, sans-serif;
+}
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 20px;
+    padding: 20px;
+}
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .footer-content {
+.partition {
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.partition h2 {
+    margin-top: 0;
+}
+
+.input-container {
+    margin-bottom: 15px;
+}
+
+.input-container label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.input-container input,
+.input-container select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.output-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.output-row div {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.output-row div:last-child {
+    margin-right: 0;
+}
+
+.output-row label {
+    font-weight: 500;
+}
+
+.output-row p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#module-power-label {
+    color: #4caf50;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+#module-power {
+    font-weight: 600;
+    color: #4caf50;
+    font-size: 24px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #333;
+    color: white;
+}
+
+.footer-content {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    padding: 5px 0;
 }
 
 .footer-content p {
     margin: 0;
-    padding: 10px;
-    width: auto;
+    padding: 3px 0;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.linkedin-logo {
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 #feedbackBtn {
@@ -166,7 +165,6 @@
 #feedbackBtn:hover {
     background-color: #0056b3;
 }
-
     </style>
 </head>
 <body>
@@ -257,7 +255,6 @@
 
         <div class="partition">
             <h2>Automation Cluster</h2>
-            <!-- Input fields for Automation Cluster -->
             <div class="input-container">
                 <label for="max-cycle-time">Maximum Cycle Time of Automation Tool (sec):</label>
                 <input type="number" id="max-cycle-time" min="1" required>
@@ -298,7 +295,6 @@
 
         <div class="partition">
             <h2>Lamination Cluster</h2>
-            <!-- Input fields for Lamination Cluster -->
             <div class="input-container">
                 <label for="lamination-cycle-time">Cycle Time in sec:</label>
                 <input type="number" id="lamination-cycle-time" min="1" required>
@@ -348,50 +344,38 @@
             </div>
         </div>
     </div>
-    <footer>
-        <div class="footer-content">
-            <p>Created by Ronit Kumar</p>
-            <a href="https://www.linkedin.com/in/ronit-kumar/">
-                <img src="linkedin-logo.png" alt="LinkedIn" class="linkedin-logo">
-            </a>
         </div>
-        <button id="feedbackBtn">Feedback</button>
+
     </footer>    
-    <button id="feedbackBtn">Feedback</button>
+    <button id="feedbackBtn">Please provide your valuable Feedback</button>
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <form action="https://formspree.io/f/xwkgydad" method="POST">
-                <label for="email">Your Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">Your Message:</label>
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="message">Your Feedback:</label>
                 <textarea id="message" name="message" required></textarea>
+                <!-- your other form fields go here -->
                 <button type="submit">Send</button>
-            </form>
+              </form>
+              
         </div>
     </div>
     <script>
             // Get the modal
             var modal = document.getElementById('feedbackModal');
 
-// Get the button that opens the modal
 var btn = document.getElementById("feedbackBtn");
-
-// Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
 btn.onclick = function() {
     modal.style.display = "block";
 }
-
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
