@@ -14,14 +14,14 @@
             box-sizing: border-box;
             font-family: 'Roboto', Arial, sans-serif;
         }
-
+    
         header {
             background-color: #333;
             color: white;
             text-align: center;
             padding: 10px 0;
         }
-
+    
         .container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -29,25 +29,25 @@
             gap: 20px;
             padding: 20px;
         }
-
+    
         .partition {
             background-color: #f5f5f5;
             padding: 20px;
         }
-
+    
         .partition h2 {
             margin-top: 0;
         }
-
+    
         .input-container {
             margin-bottom: 15px;
         }
-
+    
         .input-container label {
             font-weight: 500;
             margin-bottom: 5px;
         }
-
+    
         .input-container input,
         .input-container select {
             padding: 8px 12px;
@@ -55,52 +55,68 @@
             border-radius: 4px;
             font-size: 14px;
         }
-
+    
         .output-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 15px;
         }
-
+    
         .output-row div {
             flex: 1;
             margin-right: 15px;
         }
-
+    
         .output-row div:last-child {
             margin-right: 0;
         }
-
+    
         .output-row label {
             font-weight: 500;
         }
-
+    
         .output-row p {
             margin: 0;
             font-size: 16px;
             font-weight: 600;
         }
-
+    
         #module-power-label {
             color: #4caf50;
             font-weight: 600;
             margin-right: 10px;
         }
-
+    
         #module-power {
             font-weight: 600;
             color: #4caf50;
             font-size: 24px;
         }
-    </style>
+    
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+    
+        .linkedin-logo {
+            width: 24px;
+            vertical-align: middle;
+            margin-left: 5px;
+            
+        }
+    </style>    
 </head>
 <body>
     <header>
         <h1>Solar Manufacturing Capacity Calculator</h1>
-        <p>Created by Ronit Kumar</p>
     </header>
-
     <div class="container">
         <div class="partition">
             <h2>General Parameters</h2>
@@ -276,100 +292,113 @@
             </div>
         </div>
     </div>
-
     <script>
-        function calculateModulePower() {
-            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
-            const cellSize = parseFloat(document.getElementById('cell-size').value);
-            const cellType = document.getElementById('cell-type').value;
-            const cellEfficiency = parseFloat(document.getElementById('cell-efficiency').value);
-            const ctmLoss = parseFloat(document.getElementById('ctm-loss').value);
+        function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+}
 
-            const cellArea = (cellSize / 1000) ** 2;
-            let modulePower = numberOfCells * cellArea * 1000 * cellEfficiency * (cellType === 'full' ? 1 : 0.5) * (100 - ctmLoss) / 10000;
-            document.getElementById('module-power').textContent = modulePower.toFixed(2);
+function calculateModulePower() {
+    const numberOfCells = parseFloat(document.getElementById('number-of-cells').value) || 0;
+    const cellSize = parseFloat(document.getElementById('cell-size').value) || 0;
+    const cellType = document.getElementById('cell-type').value;
+    const cellEfficiency = parseFloat(document.getElementById('cell-efficiency').value) || 0;
+    const ctmLoss = parseFloat(document.getElementById('ctm-loss').value) || 0;
 
-            calculateStringerCluster();
-        }
+    const cellArea = (cellSize / 1000) ** 2;
+    const modulePower = numberOfCells * cellArea * 1000 * cellEfficiency * (cellType === 'full' ? 1 : 0.5) * (100 - ctmLoss) / 10000;
+    
+    document.getElementById('module-power').textContent = modulePower.toFixed(2);
 
-        function calculateStringerCluster() {
-            const grossThroughput = parseFloat(document.getElementById('gross-throughput').value);
-            const numberOfMachines = parseFloat(document.getElementById('number-of-machines').value);
-            const availability = parseFloat(document.getElementById('availability').value);
-            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
-            const modulePower = parseFloat(document.getElementById('module-power').textContent);
+    calculateStringerCluster();
+    calculateAutomationCluster();
+    calculateLaminationCluster();
+}
 
-            const modulesPerHour = (grossThroughput / numberOfCells) * numberOfMachines * availability / 100;
-            const dailyModuleProduction = modulesPerHour * 24;
-            const dailyCapacity = dailyModuleProduction * modulePower / 1000000;
+function calculateStringerCluster() {
+    const grossThroughput = parseFloat(document.getElementById('gross-throughput').value) || 0;
+    const numberOfMachines = parseFloat(document.getElementById('number-of-machines').value) || 0;
+    const availability = parseFloat(document.getElementById('availability').value) || 0;
+    const numberOfCells = parseFloat(document.getElementById('number-of-cells').value) || 0;
+    const modulePower = parseFloat(document.getElementById('module-power').textContent) || 0;
 
-            const annualCapacity = dailyCapacity * 365;
+    const modulesPerHour = (grossThroughput / numberOfCells) * numberOfMachines * availability / 100;
+    const dailyModuleProduction = modulesPerHour * 24;
+    const dailyCapacity = dailyModuleProduction * modulePower / 1000000;
+    const annualCapacity = dailyCapacity * 365;
 
-            document.getElementById('modules-per-hour').textContent = modulesPerHour.toFixed(2);
-            document.getElementById('daily-module-production').textContent = dailyModuleProduction.toFixed(2);
-            document.getElementById('daily-capacity').textContent = dailyCapacity.toFixed(2);
-            document.getElementById('annual-capacity').textContent = annualCapacity.toFixed(2);
-        }
+    document.getElementById('modules-per-hour').textContent = modulesPerHour.toFixed(2);
+    document.getElementById('daily-module-production').textContent = dailyModuleProduction.toFixed(2);
+    document.getElementById('daily-capacity').textContent = dailyCapacity.toFixed(2);
+    document.getElementById('annual-capacity').textContent = annualCapacity.toFixed(2);
+}
 
-        function calculateAutomationCluster() {
-            const maxCycleTime = parseFloat(document.getElementById('max-cycle-time').value);
-            const noOfAutomationLines = parseFloat(document.getElementById('no-of-automation-lines').value);
-            const automationAvailability = parseFloat(document.getElementById('automation-availability').value);
-            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
-            const modulePower = parseFloat(document.getElementById('module-power').textContent);
+function calculateAutomationCluster() {
+    const maxCycleTime = parseFloat(document.getElementById('max-cycle-time').value) || 0;
+    const noOfAutomationLines = parseFloat(document.getElementById('no-of-automation-lines').value) || 0;
+    const automationAvailability = parseFloat(document.getElementById('automation-availability').value) || 0;
+    const modulePower = parseFloat(document.getElementById('module-power').textContent) || 0;
 
-            const automationModulesPerHour = (3600 / maxCycleTime) * noOfAutomationLines * automationAvailability / 100;
-            const automationDailyModuleProduction = automationModulesPerHour * 24;
-            const automationDailyCapacity = automationDailyModuleProduction * modulePower / 1000000;
+    const automationModulesPerHour = (3600 / maxCycleTime) * noOfAutomationLines * automationAvailability / 100;
+    const automationDailyModuleProduction = automationModulesPerHour * 24;
+    const automationDailyCapacity = automationDailyModuleProduction * modulePower / 1000000;
+    const automationAnnualCapacity = automationDailyCapacity * 365;
 
-            const automationAnnualCapacity = automationDailyCapacity * 365;
+    document.getElementById('automation-modules-per-hour').textContent = automationModulesPerHour.toFixed(2);
+    document.getElementById('automation-daily-module-production').textContent = automationDailyModuleProduction.toFixed(2);
+    document.getElementById('automation-daily-capacity').textContent = automationDailyCapacity.toFixed(2);
+    document.getElementById('automation-annual-capacity').textContent = automationAnnualCapacity.toFixed(2);
+}
 
-            document.getElementById('automation-modules-per-hour').textContent = automationModulesPerHour.toFixed(2);
-            document.getElementById('automation-daily-module-production').textContent = automationDailyModuleProduction.toFixed(2);
-            document.getElementById('automation-daily-capacity').textContent = automationDailyCapacity.toFixed(2);
-            document.getElementById('automation-annual-capacity').textContent = automationAnnualCapacity.toFixed(2);
-        }
+function calculateLaminationCluster() {
+    const laminationCycleTime = parseFloat(document.getElementById('lamination-cycle-time').value) || 0;
+    const noOfLaminationMachines = parseFloat(document.getElementById('no-of-lamination-machines').value) || 0;
+    const noOfStacks = parseFloat(document.getElementById('no-of-stacks').value) || 0;
+    const noOfModulesInBatch = parseFloat(document.getElementById('no-of-modules-in-batch').value) || 0;
+    const laminationAvailability = parseFloat(document.getElementById('lamination-availability').value) || 0;
+    const modulePower = parseFloat(document.getElementById('module-power').textContent) || 0;
 
-        function calculateLaminationCluster() {
-            const laminationCycleTime = parseFloat(document.getElementById('lamination-cycle-time').value);
-            const noOfLaminationMachines = parseFloat(document.getElementById('no-of-lamination-machines').value);
-            const noOfStacks = parseFloat(document.getElementById('no-of-stacks').value);
-            const noOfModulesInBatch = parseFloat(document.getElementById('no-of-modules-in-batch').value);
-            const laminationAvailability = parseFloat(document.getElementById('lamination-availability').value);
-            const numberOfCells = parseFloat(document.getElementById('number-of-cells').value);
-            const modulePower = parseFloat(document.getElementById('module-power').textContent);
+    const laminationModulesPerHour = (3600 / laminationCycleTime) * noOfLaminationMachines * noOfStacks * noOfModulesInBatch * laminationAvailability / 100;
+    const laminationDailyModuleProduction = laminationModulesPerHour * 24;
+    const laminationDailyCapacity = laminationDailyModuleProduction * modulePower / 1000000;
+    const laminationAnnualCapacity = laminationDailyCapacity * 365;
 
-            const laminationModulesPerHour = (3600 / laminationCycleTime) * noOfLaminationMachines * noOfStacks * noOfModulesInBatch * laminationAvailability / 100;
-            const laminationDailyModuleProduction = laminationModulesPerHour * 24;
-            const laminationDailyCapacity = laminationDailyModuleProduction * modulePower / 1000000;
+    document.getElementById('lamination-modules-per-hour').textContent = laminationModulesPerHour.toFixed(2);
+    document.getElementById('lamination-daily-module-production').textContent = laminationDailyModuleProduction.toFixed(2);
+    document.getElementById('lamination-daily-capacity').textContent = laminationDailyCapacity.toFixed(2);
+    document.getElementById('lamination-annual-capacity').textContent = laminationAnnualCapacity.toFixed(2);
+}
 
-            const laminationAnnualCapacity = laminationDailyCapacity * 365;
+document.getElementById('number-of-cells').addEventListener('input', debounce(calculateModulePower, 300));
+document.getElementById('cell-size').addEventListener('change', debounce(calculateModulePower, 300));
+document.getElementById('cell-type').addEventListener('change', debounce(calculateModulePower, 300));
+document.getElementById('cell-efficiency').addEventListener('input', debounce(calculateModulePower, 300));
+document.getElementById('ctm-loss').addEventListener('input', debounce(calculateModulePower, 300));
 
-            document.getElementById('lamination-modules-per-hour').textContent = laminationModulesPerHour.toFixed(2);
-            document.getElementById('lamination-daily-module-production').textContent = laminationDailyModuleProduction.toFixed(2);
-            document.getElementById('lamination-daily-capacity').textContent = laminationDailyCapacity.toFixed(2);
-            document.getElementById('lamination-annual-capacity').textContent = laminationAnnualCapacity.toFixed(2);
-        }
+document.getElementById('gross-throughput').addEventListener('input', debounce(calculateStringerCluster, 300));
+document.getElementById('number-of-machines').addEventListener('input', debounce(calculateStringerCluster, 300));
+document.getElementById('availability').addEventListener('input', debounce(calculateStringerCluster, 300));
 
-        document.getElementById('number-of-cells').addEventListener('input', calculateModulePower);
-        document.getElementById('cell-size').addEventListener('change', calculateModulePower);
-        document.getElementById('cell-type').addEventListener('change', calculateModulePower);
-        document.getElementById('cell-efficiency').addEventListener('input', calculateModulePower);
-        document.getElementById('ctm-loss').addEventListener('input', calculateModulePower);
+document.getElementById('max-cycle-time').addEventListener('input', debounce(calculateAutomationCluster, 300));
+document.getElementById('no-of-automation-lines').addEventListener('input', debounce(calculateAutomationCluster, 300));
+document.getElementById('automation-availability').addEventListener('input', debounce(calculateAutomationCluster, 300));
 
-        document.getElementById('gross-throughput').addEventListener('input', calculateStringerCluster);
-        document.getElementById('number-of-machines').addEventListener('input', calculateStringerCluster);
-        document.getElementById('availability').addEventListener('input', calculateStringerCluster);
-
-        document.getElementById('max-cycle-time').addEventListener('input', calculateAutomationCluster);
-        document.getElementById('no-of-automation-lines').addEventListener('input', calculateAutomationCluster);
-        document.getElementById('automation-availability').addEventListener('input', calculateAutomationCluster);
-
-        document.getElementById('lamination-cycle-time').addEventListener('input', calculateLaminationCluster);
-        document.getElementById('no-of-lamination-machines').addEventListener('input', calculateLaminationCluster);
-        document.getElementById('no-of-stacks').addEventListener('change', calculateLaminationCluster);
-        document.getElementById('no-of-modules-in-batch').addEventListener('input', calculateLaminationCluster);
-        document.getElementById('lamination-availability').addEventListener('input', calculateLaminationCluster);
+document.getElementById('lamination-cycle-time').addEventListener('input', debounce(calculateLaminationCluster, 300));
+document.getElementById('no-of-lamination-machines').addEventListener('input', debounce(calculateLaminationCluster, 300));
+document.getElementById('no-of-stacks').addEventListener('change', debounce(calculateLaminationCluster, 300));
+document.getElementById('no-of-modules-in-batch').addEventListener('input', debounce(calculateLaminationCluster, 300));
+document.getElementById('lamination-availability').addEventListener('input', debounce(calculateLaminationCluster, 300));
     </script>
+     <footer>
+        <p>Created by Ronit Kumar</p>
+        <a href="https://www.linkedin.com/in/ronitkumar1995/" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="linkedin-logo">
+        </a>
+    </footer>
 </body>
 </html>
