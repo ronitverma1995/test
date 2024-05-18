@@ -8,167 +8,163 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Existing styles */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', Arial, sans-serif;
+}
 
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', Arial, sans-serif;
-        }
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
 
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-        }
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 20px;
+    padding: 20px;
+}
 
-        .container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: auto;
-            gap: 20px;
-            padding: 20px;
-        }
+.partition {
+    background-color: #f5f5f5;
+    padding: 20px;
+}
 
-        .partition {
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
+.partition h2 {
+    margin-top: 0;
+}
 
-        .partition h2 {
-            margin-top: 0;
-        }
+.input-container {
+    margin-bottom: 15px;
+}
 
-        .input-container {
-            margin-bottom: 15px;
-        }
+.input-container label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
 
-        .input-container label {
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
+.input-container input,
+.input-container select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
 
-        .input-container input,
-        .input-container select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
+.output-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
 
-        .output-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
+.output-row div {
+    flex: 1;
+    margin-right: 15px;
+}
 
-        .output-row div {
-            flex: 1;
-            margin-right: 15px;
-        }
+.output-row div:last-child {
+    margin-right: 0;
+}
 
-        .output-row div:last-child {
-            margin-right: 0;
-        }
+.output-row label {
+    font-weight: 500;
+}
 
-        .output-row label {
-            font-weight: 500;
-        }
+.output-row p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
 
-        .output-row p {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
+#module-power-label {
+    color: #4caf50;
+    font-weight: 600;
+    margin-right: 10px;
+}
 
-        #module-power-label {
-            color: #4caf50;
-            font-weight: 600;
-            margin-right: 10px;
-        }
+#module-power {
+    font-weight: 600;
+    color: #4caf50;
+    font-size: 24px;
+}
 
-        #module-power {
-            font-weight: 600;
-            color: #4caf50;
-            font-size: 24px;
-        }
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #333;
+    color: white;
+}
 
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            background-color: #333;
-            color: white;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-        }
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+}
 
-        .footer-content {
-            padding: 5px 0;
-        }
+.footer-content p {
+    margin: 0;
+    padding: 3px 0;
+    font-size: 12px;
+    line-height: 1;
+}
 
-        .footer-content p {
-            margin: 0;
-            padding: 3px 0;
-            font-size: 12px;
-            line-height: 1;
-        }
+.linkedin-logo {
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
 
-        .linkedin-logo {
-            width: 50px;
-            height: 50px;
-            vertical-align: middle;
-            margin-left: 5px;
-        }
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+#feedbackBtn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
 
-        #feedbackBtn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            margin: 5px 0; /* Adjust margin for spacing */
-        }
-
-        #feedbackBtn:hover {
-            background-color: #0056b3;
-        }
+#feedbackBtn:hover {
+    background-color: #0056b3;
+}
     </style>
 </head>
 <body>
@@ -259,7 +255,6 @@
 
         <div class="partition">
             <h2>Automation Cluster</h2>
-            <!-- Input fields for Automation Cluster -->
             <div class="input-container">
                 <label for="max-cycle-time">Maximum Cycle Time of Automation Tool (sec):</label>
                 <input type="number" id="max-cycle-time" min="1" required>
@@ -274,240 +269,225 @@
             </div>
             <div class="output-row">
                 <div>
-                    <label for="modules-per-hour-automation">Modules/Hr:</label>
-                    <p id="modules-per-hour-automation"></p>
+                    <label for="automation-modules-per-hour">Modules/Hr:</label>
+                    <p id="automation-modules-per-hour"></p>
                 </div>
             </div>
             <div class="output-row">
                 <div>
-                    <label for="daily-module-production-automation">Daily Module Production:</label>
-                    <p id="daily-module-production-automation"></p>
+                    <label for="automation-daily-module-production">Daily Module Production:</label>
+                    <p id="automation-daily-module-production"></p>
                 </div>
             </div>
             <div class="output-row">
                 <div>
-                    <label for="daily-capacity-automation">Daily Capacity (MW):</label>
-                    <p id="daily-capacity-automation"></p>
+                    <label for="automation-daily-capacity">Daily Capacity (MW):</label>
+                    <p id="automation-daily-capacity"></p>
                 </div>
             </div>
             <div class="output-row">
                 <div>
-                    <label for="annual-capacity-automation">Annual Capacity (MW):</label>
-                    <p id="annual-capacity-automation"></p>
+                    <label for="automation-annual-capacity">Annual Capacity (MW):</label>
+                    <p id="automation-annual-capacity"></p>
                 </div>
             </div>
         </div>
 
         <div class="partition">
             <h2>Lamination Cluster</h2>
-            <!-- Input fields for Lamination Cluster -->
             <div class="input-container">
-                <label for="max-cycle-time-lamination">Maximum Cycle Time of Laminator (sec):</label>
-                <input type="number" id="max-cycle-time-lamination" min="1" required>
+                <label for="lamination-cycle-time">Cycle Time in sec:</label>
+                <input type="number" id="lamination-cycle-time" min="1" required>
             </div>
             <div class="input-container">
-                <label for="no-of-laminator">No of Laminator:</label>
-                <input type="number" id="no-of-laminator" min="1" required>
+                <label for="no-of-lamination-machines">No of Machines:</label>
+                <input type="number" id="no-of-lamination-machines" min="1" required>
             </div>
             <div class="input-container">
-                <label for="laminator-availability">Availability (%):</label>
-                <input type="number" id="laminator-availability" min="1" max="100" step="0.01" required>
+                <label for="no-of-stacks">No of Stacks:</label>
+                <select id="no-of-stacks" required>
+                    <option value="1">Single Stack</option>
+                    <option value="2">Double Stack</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="no-of-modules-in-batch">No of Modules in a Batch:</label>
+                <input type="number" id="no-of-modules-in-batch" min="1" required>
+            </div>
+            <div class="input-container">
+                <label for="lamination-availability">Availability (%):</label>
+                <input type="number" id="lamination-availability" min="1" max="100" step="0.01" required>
             </div>
             <div class="output-row">
                 <div>
-                    <label for="modules-per-hour-lamination">Modules/Hr:</label>
-                    <p id="modules-per-hour-lamination"></p>
+                    <label for="lamination-modules-per-hour">Modules/Hr:</label>
+                    <p id="lamination-modules-per-hour"></p>
                 </div>
             </div>
             <div class="output-row">
                 <div>
-                    <label for="daily-module-production-lamination">Daily Module Production:</label>
-                    <p id="daily-module-production-lamination"></p>
+                    <label for="lamination-daily-module-production">Daily Module Production:</label>
+                    <p id="lamination-daily-module-production"></p>
                 </div>
             </div>
             <div class="output-row">
                 <div>
-                    <label for="daily-capacity-lamination">Daily Capacity (MW):</label>
-                    <p id="daily-capacity-lamination"></p>
+                    <label for="lamination-daily-capacity">Daily Capacity (MW):</label>
+                    <p id="lamination-daily-capacity"></p>
                 </div>
             </div>
             <div class="output-row">
                 <div>
-                    <label for="annual-capacity-lamination">Annual Capacity (MW):</label>
-                    <p id="annual-capacity-lamination"></p>
+                    <label for="lamination-annual-capacity">Annual Capacity (MW):</label>
+                    <p id="lamination-annual-capacity"></p>
                 </div>
             </div>
         </div>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <p>Created by Ronit Kumar</p>
-            <a href="https://www.linkedin.com/in/ronit-kumar"><img src="https://example.com/linkedin-logo.png" alt="LinkedIn" class="linkedin-logo"></a>
-            <button id="feedbackBtn">Feedback</button>
         </div>
-    </footer>
 
-    <!-- Feedback modal -->
+    </footer>    
+    <button id="feedbackBtn">Please provide your valuable Feedback</button>
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Feedback Form</h2>
-            <form id="feedbackForm">
-                <div class="input-container">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="input-container">
-                    <label for="feedback">Feedback:</label>
-                    <textarea id="feedback" name="feedback" required></textarea>
-                </div>
-                <button type="submit">Submit</button>
-            </form>
+            <form action="https://formspree.io/f/xwkgydad" method="POST">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="message">Your Feedback:</label>
+                <textarea id="message" name="message" required></textarea>
+                <!-- your other form fields go here -->
+                <button type="submit">Send</button>
+              </form>
+              
         </div>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modulePower = document.getElementById('module-power');
-            const cellEfficiencyInput = document.getElementById('cell-efficiency');
-            const ctmLossInput = document.getElementById('ctm-loss');
-            const cellSizeInput = document.getElementById('cell-size');
-            const numberOfCellsInput = document.getElementById('number-of-cells');
+            // Get the modal
+            var modal = document.getElementById('feedbackModal');
 
-            const grossThroughputInput = document.getElementById('gross-throughput');
-            const numberOfMachinesInput = document.getElementById('number-of-machines');
-            const availabilityInput = document.getElementById('availability');
+var btn = document.getElementById("feedbackBtn");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+span.onclick = function() {
+    modal.style.display = "none";
+}
 
-            const maxCycleTimeInput = document.getElementById('max-cycle-time');
-            const numberOfAutomationLinesInput = document.getElementById('no-of-automation-lines');
-            const automationAvailabilityInput = document.getElementById('automation-availability');
+.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+        function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+}
 
-            const maxCycleTimeLaminationInput = document.getElementById('max-cycle-time-lamination');
-            const numberOfLaminatorInput = document.getElementById('no-of-laminator');
-            const laminatorAvailabilityInput = document.getElementById('laminator-availability');
+function calculateModulePower() {
+    const numberOfCells = parseFloat(document.getElementById('number-of-cells').value) || 0;
+    const cellSize = parseFloat(document.getElementById('cell-size').value) || 0;
+    const cellType = document.getElementById('cell-type').value;
+    const cellEfficiency = parseFloat(document.getElementById('cell-efficiency').value) || 0;
+    const ctmLoss = parseFloat(document.getElementById('ctm-loss').value) || 0;
 
-            const modulesPerHourOutput = document.getElementById('modules-per-hour');
-            const dailyModuleProductionOutput = document.getElementById('daily-module-production');
-            const dailyCapacityOutput = document.getElementById('daily-capacity');
-            const annualCapacityOutput = document.getElementById('annual-capacity');
+    const cellArea = (cellSize / 1000) ** 2;
+    const modulePower = numberOfCells * cellArea * 1000 * cellEfficiency * (cellType === 'full' ? 1 : 0.5) * (100 - ctmLoss) / 10000;
+    
+    document.getElementById('module-power').textContent = modulePower.toFixed(2);
 
-            const modulesPerHourAutomationOutput = document.getElementById('modules-per-hour-automation');
-            const dailyModuleProductionAutomationOutput = document.getElementById('daily-module-production-automation');
-            const dailyCapacityAutomationOutput = document.getElementById('daily-capacity-automation');
-            const annualCapacityAutomationOutput = document.getElementById('annual-capacity-automation');
+    calculateStringerCluster();
+    calculateAutomationCluster();
+    calculateLaminationCluster();
+}
 
-            const modulesPerHourLaminationOutput = document.getElementById('modules-per-hour-lamination');
-            const dailyModuleProductionLaminationOutput = document.getElementById('daily-module-production-lamination');
-            const dailyCapacityLaminationOutput = document.getElementById('daily-capacity-lamination');
-            const annualCapacityLaminationOutput = document.getElementById('annual-capacity-lamination');
+function calculateStringerCluster() {
+    const grossThroughput = parseFloat(document.getElementById('gross-throughput').value) || 0;
+    const numberOfMachines = parseFloat(document.getElementById('number-of-machines').value) || 0;
+    const availability = parseFloat(document.getElementById('availability').value) || 0;
+    const numberOfCells = parseFloat(document.getElementById('number-of-cells').value) || 0;
+    const modulePower = parseFloat(document.getElementById('module-power').textContent) || 0;
 
-            const updateModulePower = () => {
-                const numberOfCells = parseFloat(numberOfCellsInput.value) || 0;
-                const cellSize = parseFloat(cellSizeInput.value) || 0;
-                const cellEfficiency = parseFloat(cellEfficiencyInput.value) || 0;
-                const ctmLoss = parseFloat(ctmLossInput.value) || 0;
+    const modulesPerHour = (grossThroughput / numberOfCells) * numberOfMachines * availability / 100;
+    const dailyModuleProduction = modulesPerHour * 24;
+    const dailyCapacity = dailyModuleProduction * modulePower / 1000000;
+    const annualCapacity = dailyCapacity * 365;
 
-                const activeArea = (numberOfCells * cellSize * cellSize) / 1e6; // Convert mm^2 to m^2
-                const modulePowerValue = activeArea * cellEfficiency * (1 - (ctmLoss / 100)) * 10; // Efficiency as percentage
+    document.getElementById('modules-per-hour').textContent = modulesPerHour.toFixed(2);
+    document.getElementById('daily-module-production').textContent = dailyModuleProduction.toFixed(2);
+    document.getElementById('daily-capacity').textContent = dailyCapacity.toFixed(2);
+    document.getElementById('annual-capacity').textContent = annualCapacity.toFixed(2);
+}
 
-                modulePower.innerText = modulePowerValue.toFixed(2);
-            };
+function calculateAutomationCluster() {
+    const maxCycleTime = parseFloat(document.getElementById('max-cycle-time').value) || 0;
+    const noOfAutomationLines = parseFloat(document.getElementById('no-of-automation-lines').value) || 0;
+    const automationAvailability = parseFloat(document.getElementById('automation-availability').value) || 0;
+    const modulePower = parseFloat(document.getElementById('module-power').textContent) || 0;
 
-            const updateStringersCluster = () => {
-                const grossThroughput = parseFloat(grossThroughputInput.value) || 0;
-                const numberOfMachines = parseFloat(numberOfMachinesInput.value) || 0;
-                const availability = parseFloat(availabilityInput.value) || 0;
-                const modulePowerValue = parseFloat(modulePower.innerText) || 0;
+    const automationModulesPerHour = (3600 / maxCycleTime) * noOfAutomationLines * automationAvailability / 100;
+    const automationDailyModuleProduction = automationModulesPerHour * 24;
+    const automationDailyCapacity = automationDailyModuleProduction * modulePower / 1000000;
+    const automationAnnualCapacity = automationDailyCapacity * 365;
 
-                const modulesPerHour = (grossThroughput * numberOfMachines * (availability / 100)) / parseFloat(numberOfCellsInput.value);
-                const dailyModuleProduction = modulesPerHour * 24;
-                const dailyCapacity = dailyModuleProduction * modulePowerValue / 1e6; // Convert to MW
-                const annualCapacity = dailyCapacity * 330; // Assuming 330 working days in a year
+    document.getElementById('automation-modules-per-hour').textContent = automationModulesPerHour.toFixed(2);
+    document.getElementById('automation-daily-module-production').textContent = automationDailyModuleProduction.toFixed(2);
+    document.getElementById('automation-daily-capacity').textContent = automationDailyCapacity.toFixed(2);
+    document.getElementById('automation-annual-capacity').textContent = automationAnnualCapacity.toFixed(2);
+}
 
-                modulesPerHourOutput.innerText = modulesPerHour.toFixed(2);
-                dailyModuleProductionOutput.innerText = dailyModuleProduction.toFixed(2);
-                dailyCapacityOutput.innerText = dailyCapacity.toFixed(2);
-                annualCapacityOutput.innerText = annualCapacity.toFixed(2);
-            };
+function calculateLaminationCluster() {
+    const laminationCycleTime = parseFloat(document.getElementById('lamination-cycle-time').value) || 0;
+    const noOfLaminationMachines = parseFloat(document.getElementById('no-of-lamination-machines').value) || 0;
+    const noOfStacks = parseFloat(document.getElementById('no-of-stacks').value) || 0;
+    const noOfModulesInBatch = parseFloat(document.getElementById('no-of-modules-in-batch').value) || 0;
+    const laminationAvailability = parseFloat(document.getElementById('lamination-availability').value) || 0;
+    const modulePower = parseFloat(document.getElementById('module-power').textContent) || 0;
 
-            const updateAutomationCluster = () => {
-                const maxCycleTime = parseFloat(maxCycleTimeInput.value) || 0;
-                const numberOfAutomationLines = parseFloat(numberOfAutomationLinesInput.value) || 0;
-                const automationAvailability = parseFloat(automationAvailabilityInput.value) || 0;
-                const modulePowerValue = parseFloat(modulePower.innerText) || 0;
+    const laminationModulesPerHour = (3600 / laminationCycleTime) * noOfLaminationMachines * noOfStacks * noOfModulesInBatch * laminationAvailability / 100;
+    const laminationDailyModuleProduction = laminationModulesPerHour * 24;
+    const laminationDailyCapacity = laminationDailyModuleProduction * modulePower / 1000000;
+    const laminationAnnualCapacity = laminationDailyCapacity * 365;
 
-                const modulesPerHourAutomation = (3600 / maxCycleTime) * numberOfAutomationLines * (automationAvailability / 100);
-                const dailyModuleProductionAutomation = modulesPerHourAutomation * 24;
-                const dailyCapacityAutomation = dailyModuleProductionAutomation * modulePowerValue / 1e6; // Convert to MW
-                const annualCapacityAutomation = dailyCapacityAutomation * 330; // Assuming 330 working days in a year
+    document.getElementById('lamination-modules-per-hour').textContent = laminationModulesPerHour.toFixed(2);
+    document.getElementById('lamination-daily-module-production').textContent = laminationDailyModuleProduction.toFixed(2);
+    document.getElementById('lamination-daily-capacity').textContent = laminationDailyCapacity.toFixed(2);
+    document.getElementById('lamination-annual-capacity').textContent = laminationAnnualCapacity.toFixed(2);
+}
 
-                modulesPerHourAutomationOutput.innerText = modulesPerHourAutomation.toFixed(2);
-                dailyModuleProductionAutomationOutput.innerText = dailyModuleProductionAutomation.toFixed(2);
-                dailyCapacityAutomationOutput.innerText = dailyCapacityAutomation.toFixed(2);
-                annualCapacityAutomationOutput.innerText = annualCapacityAutomation.toFixed(2);
-            };
+document.getElementById('number-of-cells').addEventListener('input', debounce(calculateModulePower, 300));
+document.getElementById('cell-size').addEventListener('change', debounce(calculateModulePower, 300));
+document.getElementById('cell-type').addEventListener('change', debounce(calculateModulePower, 300));
+document.getElementById('cell-efficiency').addEventListener('input', debounce(calculateModulePower, 300));
+document.getElementById('ctm-loss').addEventListener('input', debounce(calculateModulePower, 300));
 
-            const updateLaminationCluster = () => {
-                const maxCycleTimeLamination = parseFloat(maxCycleTimeLaminationInput.value) || 0;
-                const numberOfLaminator = parseFloat(numberOfLaminatorInput.value) || 0;
-                const laminatorAvailability = parseFloat(laminatorAvailabilityInput.value) || 0;
-                const modulePowerValue = parseFloat(modulePower.innerText) || 0;
+document.getElementById('gross-throughput').addEventListener('input', debounce(calculateStringerCluster, 300));
+document.getElementById('number-of-machines').addEventListener('input', debounce(calculateStringerCluster, 300));
+document.getElementById('availability').addEventListener('input', debounce(calculateStringerCluster, 300));
 
-                const modulesPerHourLamination = (3600 / maxCycleTimeLamination) * numberOfLaminator * (laminatorAvailability / 100);
-                const dailyModuleProductionLamination = modulesPerHourLamination * 24;
-                const dailyCapacityLamination = dailyModuleProductionLamination * modulePowerValue / 1e6; // Convert to MW
-                const annualCapacityLamination = dailyCapacityLamination * 330; // Assuming 330 working days in a year
+document.getElementById('max-cycle-time').addEventListener('input', debounce(calculateAutomationCluster, 300));
+document.getElementById('no-of-automation-lines').addEventListener('input', debounce(calculateAutomationCluster, 300));
+document.getElementById('automation-availability').addEventListener('input', debounce(calculateAutomationCluster, 300));
 
-                modulesPerHourLaminationOutput.innerText = modulesPerHourLamination.toFixed(2);
-                dailyModuleProductionLaminationOutput.innerText = dailyModuleProductionLamination.toFixed(2);
-                dailyCapacityLaminationOutput.innerText = dailyCapacityLamination.toFixed(2);
-                annualCapacityLaminationOutput.innerText = annualCapacityLamination.toFixed(2);
-            };
-
-            const updateAllClusters = () => {
-                updateModulePower();
-                updateStringersCluster();
-                updateAutomationCluster();
-                updateLaminationCluster();
-            };
-
-            cellEfficiencyInput.addEventListener('input', updateAllClusters);
-            ctmLossInput.addEventListener('input', updateAllClusters);
-            cellSizeInput.addEventListener('input', updateAllClusters);
-            numberOfCellsInput.addEventListener('input', updateAllClusters);
-
-            grossThroughputInput.addEventListener('input', updateStringersCluster);
-            numberOfMachinesInput.addEventListener('input', updateStringersCluster);
-            availabilityInput.addEventListener('input', updateStringersCluster);
-
-            maxCycleTimeInput.addEventListener('input', updateAutomationCluster);
-            numberOfAutomationLinesInput.addEventListener('input', updateAutomationCluster);
-            automationAvailabilityInput.addEventListener('input', updateAutomationCluster);
-
-            maxCycleTimeLaminationInput.addEventListener('input', updateLaminationCluster);
-            numberOfLaminatorInput.addEventListener('input', updateLaminationCluster);
-            laminatorAvailabilityInput.addEventListener('input', updateLaminationCluster);
-
-            // Feedback modal logic
-            const feedbackBtn = document.getElementById('feedbackBtn');
-            const feedbackModal = document.getElementById('feedbackModal');
-            const closeBtn = document.querySelector('.close');
-
-            feedbackBtn.addEventListener('click', () => {
-                feedbackModal.style.display = 'block';
-            });
-
-            closeBtn.addEventListener('click', () => {
-                feedbackModal.style.display = 'none';
-            });
-
-            window.addEventListener('click', (event) => {
-                if (event.target == feedbackModal) {
-                    feedbackModal.style.display = 'none';
-                }
-            });
-        });
+document.getElementById('lamination-cycle-time').addEventListener('input', debounce(calculateLaminationCluster, 300));
+document.getElementById('no-of-lamination-machines').addEventListener('input', debounce(calculateLaminationCluster, 300));
+document.getElementById('no-of-stacks').addEventListener('change', debounce(calculateLaminationCluster, 300));
+document.getElementById('no-of-modules-in-batch').addEventListener('input', debounce(calculateLaminationCluster, 300));
+document.getElementById('lamination-availability').addEventListener('input', debounce(calculateLaminationCluster, 300));
     </script>
+     <footer>
+        <div class="footer-content">
+            <p>Created by Ronit Kumar</p>
+        </div>
+        <a href="https://www.linkedin.com/in/ronitkumar1995/" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="linkedin-logo">
+        </a>
+    </footer>    
 </body>
 </html>
